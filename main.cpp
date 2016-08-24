@@ -1,17 +1,27 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "URLValidator.h"
 
 using namespace std;
 
 int main()
 {
-	std::string url = R"(http://127.0.0.1/w/cpp/regex/regex_match)";
-
-    cout << url << endl;
-
 	URLValidator url_validator;
+	std::ifstream fin("foo.txt", std::ios::in);
+	std::ofstream fout("result", std::ios::out);
+	char line[1024] = { 0 };
+	int max = 10000;
 
-	cout << url_validator.match(url) << endl;
+	while (fin.getline(line, sizeof(line)))
+	{
+		if (max <= 0)
+			break;
+		fout << line << "=" << url_validator.match(line) << endl;
+		max--;
+	}
+	fin.clear();
+	fin.close();
+	fout.close();
 	return 0;
 }
