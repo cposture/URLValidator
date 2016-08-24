@@ -3,12 +3,11 @@
 #include <iostream>
 
 URLValidator::URLValidator()
-        : m_unicode(R"(\u00a1-\ffff)")
-        , m_ipv4(R"((?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)(?:\.(?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3})")
+        : m_ipv4(R"((?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)(?:\.(?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3})")
 {
     //m_domain = R"((?:\.(?!-)[a-z)" + m_unicode + R"(0-9-]{1,63}(?<!-))*)";
-	m_domain = R"((?:\.(?!-)[a-z)" + m_unicode + R"(0-9-]{1,63})*)";
-    m_hostname = R"([a-z)" + m_unicode + R"(0-9](?:[a-z)" + m_unicode + R"(0-9-]{0,61}[a-z)" + m_unicode + R"(0-9])?)";
+	m_domain = R"((?:\.(?!-)[a-z\u00a1-\ffff0-9-]{1,63})*)";
+    m_hostname = R"([a-z\u00a1-\ffff0-9](?:[a-z\u00a1-\ffff0-9-]{0,61}[a-z\u00a1-\ffff0-9])?)";
     m_tld = R"(\.)"
             R"((?!-))"
             R"((?:[a-z' + ul + '-]{2,63})"

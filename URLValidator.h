@@ -8,7 +8,6 @@ public:
 	
 	bool match(const std::string &value);
 private:
-	std::string m_unicode;
 	std::string m_host;
 	std::string m_ipv4;
 	std::string m_domain;
