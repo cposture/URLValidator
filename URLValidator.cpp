@@ -38,6 +38,7 @@ URLValidator::URLValidator()
 	m_hostname = m_domain + m_toplabel;
     m_host = "("
 			+ m_hostname
+			+ "|"
 			+ m_ipv4
             + "|localhost)";
 }
