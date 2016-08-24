@@ -1,5 +1,4 @@
 #include <string>
-#include <vector>
 
 class URLValidator
 {
@@ -14,5 +13,4 @@ private:
 	std::string m_toplabel;
 	std::string m_hostname;
 	std::string m_tld;
-	std::vector<std::string> m_schemes;
 };

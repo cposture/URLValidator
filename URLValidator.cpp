@@ -18,21 +18,17 @@ URLValidator::URLValidator()
 		domainlabel    = alphadigit | alphadigit *[ alphadigit | "-" ] alphadigit
 		toplabel       = alpha | alpha *[ alphadigit | "-" ] alphadigit
 	*/
-	m_domain = m_domain
-		+ R"(()"
-		+ R"((?:[a-z\u00a1-\ffff0-9]))"
-		+ R"(|()"
-		+ R"((?:[a-z\u00a1-\ffff0-9]))"
-		+ R"((?:[a-z\u00a1-\ffff0-9-]*))"
-		+ R"((?:[a-z\u00a1-\ffff0-9])))"
-		+ R"(\.)"
-		+ R"()*)";
-	m_toplabel = m_toplabel
-		+ R"((?:[a-z\u00a1-\ffff]))"
-		+ R"(|()"
-		+ R"((?:[a-z\u00a1-\ffff]))"
-		+ R"((?:[a-z\u00a1-\ffff0-9-]*))"
-		+ R"((?:[a-z\u00a1-\ffff0-9])))";
+	//m_domain = m_domain
+	//	+ R"(()"
+	//	+ R"((?:[a-z\u00a1-\ffff0-9]))"
+	//	+ R"(|()"
+	//	+ R"((?:[a-z\u00a1-\ffff0-9]))"
+	//	+ R"((?:[a-z\u00a1-\ffff0-9-]*))"
+	//	+ R"((?:[a-z\u00a1-\ffff0-9])))"
+	//	+ R"(\.)"
+	//	+ R"()*)";
+	m_domain = R"([a-z\u00a1-\uffff0-9](?:[a-z\u00a1-\uffff0-9-]{0,61}[a-z\u00a1-\uffff0-9])?)";
+	m_toplabel = R"((?:\.(?!-)[a-z\u00a1-\uffff0-9-]{1,63})*)"; //用以表示最右边的域标志，它不能以数字开头
 	m_hostname = m_domain + m_toplabel;
 	/*
 	m_hostname :
@@ -42,20 +38,16 @@ URLValidator::URLValidator()
     m_host = "("
 			+ m_hostname
             + "|localhost)";
-
-    m_schemes.push_back("http");
-    m_schemes.push_back("https");
-    m_schemes.push_back("ftp");
-    m_schemes.push_back("ftps");
 }
 
 bool URLValidator::match(const std::string &value)
 {
 	std::string pattern_str;
 	pattern_str =
-                R"(^http(s)?://)"						//http(s)
-                //R"((?:\S+(?::\S*)?@)?)"					//用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
-                R"((?::\d{2,5})?)"						//端口，“:port” 可以省略，
+                R"(^(?:http(s)?)://)"					//http(s)
+                R"((?:\S+(?::\S*)?@)?)"					//用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
+				R"((?:)" + m_ipv4 + "|" + m_host + ")"	//host
+				R"((?::\d{2,5})?)"						//端口，“:port” 可以省略，
                 R"((?:[/?#][^\s]*)?)";					//hpath
 	std::cout << pattern_str << std::endl;
 	std::regex pattern(m_domain);
