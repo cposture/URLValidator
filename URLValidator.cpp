@@ -5,7 +5,7 @@
 URLValidator::URLValidator()
         : m_ipv4(R"((?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)(?:\.(?:25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3})")
 {
-	/*	
+	/*
 	RFC 1738 :
 		;HTTP(超文本传输协议)
 		httpurl        = "http://" hostport [ "/" hpath [ "?" search ]]
@@ -33,7 +33,7 @@ URLValidator::URLValidator()
 		+ R"((?:[a-z)" + unicode_str + R"(0-9])))"
 		+ R"(\.)"
 		+ R"()*)";
-	
+
 	m_toplabel = R"((?:\.(?!-)[a-z)" + unicode_str + R"(0-9-]{1,63})*)"; //用以表示最右边的域标志，它不能以数字开头
 	m_hostname = m_domain + m_toplabel;
     m_host = "("
@@ -46,15 +46,21 @@ URLValidator::URLValidator()
 bool URLValidator::match(const std::string &value)
 {
 	std::string pattern_str;
+  std::string hsegment;
+  std::string unicode_str = "\u00a1-\uffff";
+  hsegment = hsegment
+        + R"(((?:[a-z)" + unicode_str + R"(0-9\+\.\*\(\)\$-_!',;:&=@]))" // alphadigit
+        + R"(|(?:%[0-9a-f]{2})))";
+
 	pattern_str =
                 R"(^(?:http(s)?)://)"					//http(s)
                 R"((?:\S+(?::\S*)?@)?)"					//用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
-				R"((?:)" +  m_host + ")"				//主机		
+				R"((?:)" +  m_host + ")"				//主机
 				R"((?::\d{2,5})?)"						//端口，“:port” 可以省略，
-                R"((?:[/?#][^\s]*)?)";					//hpath
+                //R"((?:[/?#][^\s]*)?)";					//hpath
+                R"((/)" + hsegment + R"()+)"
+                R"((\?)" + hsegment + R"()?)";
 	std::cout << pattern_str << std::endl;
 	std::regex pattern(pattern_str);
-
 	return std::regex_match(value, pattern);
 }
-

@@ -4,7 +4,7 @@ class URLValidator
 {
 public:
 	URLValidator();
-	
+
 	bool match(const std::string &value);
 private:
 	std::string m_host;
