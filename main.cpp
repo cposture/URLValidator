@@ -11,7 +11,7 @@ int main()
 	std::ifstream fin("foo.txt", std::ios::in);
 	std::ofstream fout("result", std::ios::out);
 	char line[1024] = { 0 };
-	int max = 20;
+	int max = 10000;
 
 	while (fin.getline(line, sizeof(line)))
 	{
