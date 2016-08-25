@@ -33,11 +33,12 @@ URLValidator::URLValidator()
 		+ R"((?:[a-z)" + unicode_str + R"(0-9])))"
 		+ R"()\.)*)";
 
-	m_toplabel = R"(([a-z)" + unicode_str + R"(])" 
-			+ R"(|)" 
-			+ R"([a-z)" + unicode_str + R"(])" 
-			+ R"((?:[a-z)" + unicode_str + R"(0-9-]*))" 
-			+ R"((?:[a-z)" + unicode_str + R"(0-9])))"; //用以表示最右边的域标志，它不能以数字开头
+	m_toplabel = R"((?:(?![-0-9])[a-z)" + unicode_str + R"(0-9-]{1,63})*)"; //用以表示最右边的域标志，它不能以数字开头
+	//m_toplabel = R"(([a-z)" + unicode_str + R"(])" 
+	//		+ R"(|)" 
+	//		+ R"([a-z)" + unicode_str + R"(])" 
+	//		+ R"((?:[a-z)" + unicode_str + R"(0-9-]*))" 
+	//		+ R"((?:[a-z)" + unicode_str + R"(0-9])))"; //用以表示最右边的域标志，它不能以数字开头
 
 	m_hostname = m_domain + m_toplabel;
     m_host = "("
