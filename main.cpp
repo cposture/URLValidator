@@ -11,15 +11,31 @@ int main()
 	std::ifstream fin("foo.txt", std::ios::in);
 	std::ofstream fout("result", std::ios::out);
 	char line[1024] = { 0 };
-	int max = 10000;
+	int max = 12000;
+	int valid = 0;
+	int invalid = 0;
 
 	while (fin.getline(line, sizeof(line)))
 	{
 		if (max <= 0)
 			break;
-		fout << line << "=" << url_validator.match(line) << endl;
+		try{
+			if (url_validator.match(line))
+			{
+				valid++;
+			}
+			else
+			{
+				invalid++;
+			}
+		}
+		catch (...)
+		{
+			;
+		}
 		max--;
 	}
+	fout << "valid:" << valid << "  invalid:" << invalid;
 	fin.clear();
 	fin.close();
 	fout.close();

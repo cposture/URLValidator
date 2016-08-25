@@ -5,7 +5,7 @@ import linecache
 
 def getURL(url,file_savepath="foo.txt",max_count=10):
     content = urllib.request.urlopen(url=url, timeout=3).read().decode("utf-8")
-    fo = open(file_savepath, "w+")
+    fo = open(file_savepath, "w+",encoding='utf-8')
     line_url_index = 1;
     anchor_index = 0
     while anchor_index >= 0 and max_count > 0:
@@ -16,7 +16,7 @@ def getURL(url,file_savepath="foo.txt",max_count=10):
         anchor_index = second_quota_index
         if begin <= 0 or anchor_index < 0:
             fo.close()
-            fo = open(file_savepath, "a+")
+            fo = open(file_savepath, "a+",encoding='utf-8')
             url_str = linecache.getline(file_savepath,line_url_index)
             line_url_index += 1
             print("new===========================")
@@ -36,5 +36,5 @@ def getURL(url,file_savepath="foo.txt",max_count=10):
                 max_count -= 1
     fo.close()
 
-getURL("http://www.hao123.com/", "foo.txt", 10000)
+getURL("http://www.hao123.com/", "foo.txt", 100000)
 

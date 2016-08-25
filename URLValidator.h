@@ -13,4 +13,5 @@ private:
 	std::string m_toplabel;
 	std::string m_hostname;
 	std::string m_tld;
+	std::string m_unicode;
 };
