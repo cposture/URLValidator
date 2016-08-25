@@ -27,6 +27,7 @@ int main()
 			else
 			{
 				invalid++;
+				fout << line << endl;
 			}
 		}
 		catch (...)
