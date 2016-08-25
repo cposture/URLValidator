@@ -25,16 +25,20 @@ URLValidator::URLValidator()
 	*/
 	std::string unicode_str = "\u00a1-\uffff";
 	m_domain = m_domain
-		+ R"(()"
+		+ R"((()"
 		+ R"((?:[a-z)" + unicode_str + R"(0-9]))"
 		+ R"(|()"
 		+ R"((?:[a-z)" + unicode_str + R"(0-9]))"
 		+ R"((?:[a-z)" + unicode_str + R"(0-9-]*))"
 		+ R"((?:[a-z)" + unicode_str + R"(0-9])))"
-		+ R"(\.)"
-		+ R"()*)";
+		+ R"()\.)*)";
 
-	m_toplabel = R"((?:\.(?!-)[a-z)" + unicode_str + R"(0-9-]{1,63})*)"; //用以表示最右边的域标志，它不能以数字开头
+	m_toplabel = R"(([a-z)" + unicode_str + R"(])" 
+			+ R"(|)" 
+			+ R"([a-z)" + unicode_str + R"(])" 
+			+ R"((?:[a-z)" + unicode_str + R"(0-9-]*))" 
+			+ R"((?:[a-z)" + unicode_str + R"(0-9])))"; //用以表示最右边的域标志，它不能以数字开头
+
 	m_hostname = m_domain + m_toplabel;
     m_host = "("
 			+ m_hostname
@@ -50,17 +54,15 @@ bool URLValidator::match(const std::string &value)
   std::string unicode_str = "\u00a1-\uffff";
   hsegment = hsegment
         + R"(((?:[a-z)" + unicode_str + R"(0-9\+\.\*\(\)\$-_!',;:&=@]))" // alphadigit
-        + R"(|(?:%[0-9a-f]{2})))";
+        + R"(|(?:%[0-9a-f]{2}))*)";
 
 	pattern_str =
                 R"(^(?:http(s)?)://)"					//http(s)
                 R"((?:\S+(?::\S*)?@)?)"					//用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
 				R"((?:)" +  m_host + ")"				//主机
-				R"((?::\d{2,5})?)"						//端口，“:port” 可以省略，
-                //R"((?:[/?#][^\s]*)?)";					//hpath
-                R"((/)" + hsegment + R"()+)"
+				R"((?::\d{2,5})?)"						//端口，“:port” 可以省略
+                R"((/)" + hsegment + R"()*)"			//
                 R"((\?)" + hsegment + R"()?)";
-	std::cout << pattern_str << std::endl;
 	std::regex pattern(pattern_str);
 	return std::regex_match(value, pattern);
 }
