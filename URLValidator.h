@@ -1,4 +1,5 @@
 #include <string>
+#include <regex>
 
 class URLValidator
 {
@@ -14,4 +15,7 @@ private:
 	std::string m_hostname;
 	std::string m_tld;
 	std::string m_unicode;
+	std::string m_pattern;
+	std::string m_hsegment;
+	std::regex m_pattern_reg;
 };

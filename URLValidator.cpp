@@ -1,5 +1,4 @@
 #include "URLValidator.h"
-#include <regex>
 #include <iostream>
 
 URLValidator::URLValidator()
@@ -43,25 +42,24 @@ URLValidator::URLValidator()
 			+ "|"
 			+ m_ipv4
             + "|localhost)";
-}
 
-bool URLValidator::match(const std::string &value)
-{
-	std::string pattern_str;
-	std::string hsegment;
-
-    hsegment = hsegment
+	m_hsegment = m_hsegment
 		+ R"(((?:[a-z)" + m_unicode + R"(0-9\+\.\*\(\)\$-_!',;:&=@]))" // alphadigit
-        + R"(|(?:%[0-9a-f]{2}))*)";
+		+ R"(|(?:%[0-9a-f]{2}))*)";
 
-	pattern_str =
+	m_pattern =
 		R"(^(?:http(s)?)://)"					//http(s)
 		R"((?:\S+(?::\S*)?@)?)"					//用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
 		R"((?:)" + m_host + ")"					//主机
 		R"((?::\d{2,5})?)"						//端口，“:port” 可以省略
-		R"((/)" + hsegment + R"()*)"			//hpath
-		R"((\?)" + hsegment + R"()?)"			//search
+		R"((/)" + m_hsegment + R"()*)"			//hpath
+		R"((\?)" + m_hsegment + R"()?)"			//search
 		R"(\s?$)";
-	std::regex pattern(pattern_str);
-	return std::regex_match(value, pattern);
+
+	m_pattern_reg = std::regex(m_pattern);
+}
+
+bool URLValidator::match(const std::string &value)
+{
+	return std::regex_match(value, m_pattern_reg);
 }
