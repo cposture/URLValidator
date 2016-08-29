@@ -47,12 +47,12 @@ URLValidator::URLValidator()
         + R"(((?:[a-z)" + m_unicode + R"(0-9\+\.\*\(\)\$-_!',;:&=@]))" // alphadigit
         + R"(|(?:%[0-9a-f]{2}))*)";
 
-    m_pattern = R"(^(?:http(s)?)://)"					//http(s)
-                R"((?:\S+(?::\S*)?@)?)"					//用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
-                R"((?:)" + m_host + ")"					//主机
-                R"((?::\d{2,5})?)"						//端口，“:port” 可以省略
-                R"((/)" + m_hsegment + R"()*)"			//hpath
-                R"((\?)" + m_hsegment + R"()?)"			//search
+    m_pattern = R"(^(?:http(s)?)://)"           //http(s)
+        R"((?:\S+(?::\S*)?@)?)"	                //用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
+        R"((?:)" + m_host + ")"                 //主机
+        R"((?::\d{2,5})?)"                      //端口，“:port” 可以省略
+        R"((/)" + m_hsegment + R"()*)"	        //hpath
+        R"((\?)" + m_hsegment + R"()?)"	        //search
                 R"(\s?$)";
 
     m_pattern_reg = std::regex(m_pattern);
