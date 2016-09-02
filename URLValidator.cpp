@@ -31,9 +31,9 @@ URLValidator::URLValidator()
             + R"((?:[a-z)" + m_unicode + R"(0-9]))"
             + R"((?:[a-z)" + m_unicode + R"(0-9-]*))"
             + R"((?:[a-z)" + m_unicode + R"(0-9])))"
-        + R"()\.)*)";
+            + R"()\.)*)";
 
-    m_toplabel = R"((?:(?![-0-9])[a-z)" + m_unicode + R"(0-9-]{1,63})*)"; //用以表示最右边的域标志，它不能以数字开头
+    m_toplabel = R"((?:(?![-0-9])[a-z)" + m_unicode + R"(0-9-]{1,63})+)"; //用以表示最右边的域标志，它不能以数字开头
 
     m_hostname = m_domain + m_toplabel;
 
@@ -48,11 +48,11 @@ URLValidator::URLValidator()
         + R"(|(?:%[0-9a-f]{2}))*)";
 
     m_pattern = R"(^(?:http(s)?)://)"           //http(s)
-        R"((?:\S+(?::\S*)?@)?)"	                //用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
-        R"((?:)" + m_host + ")"                 //主机
-        R"((?::\d{2,5})?)"                      //端口，“:port” 可以省略
-        R"((/)" + m_hsegment + R"()*)"	        //hpath
-        R"((\?)" + m_hsegment + R"()?)"	        //search
+                R"((?:\S+(?::\S*)?@)?)"	        //用户:密码,可以省略“<用户名>:<密码>@”，“ :<密码>”
+                R"((?:)" + m_host + ")"         //主机
+                R"((?::\d{2,5})?)"              //端口，“:port” 可以省略
+                R"((/)" + m_hsegment + R"()*)"	//hpath
+                R"((\?)" + m_hsegment + R"()?)"	//search
                 R"(\s?$)";
 
     m_pattern_reg = std::regex(m_pattern);
